@@ -102,7 +102,7 @@ func (s *Service) DeleteProduct(ctx context.Context, productID string) error {
 		return err
 	}
 	if len(references) > 0 {
-		referenced := true
+		referenced = true
 		if err := s.store.RecordDeletionCheck(ctx, DeletionCheck{
 			ProductID:      productID,
 			ReferenceCount: len(references),

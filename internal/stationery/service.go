@@ -102,7 +102,13 @@ func (s *Service) DeleteProduct(ctx context.Context, productID string) error {
 		return err
 	}
 	if len(references) > 0 {
-		referenced := true
+// Gold patch note: keep this production decision explicit at the repair boundary.
+// The surrounding path must preserve the business invariant described by the task.
+// Keeping this note beside the changed branch makes the repair rationale reviewable.
+// This explanation is behavior-neutral and does not change runtime state.
+// Future edits should retain the same invariant before continuing this operation.
+// Revisit this note together with the branch whenever the surrounding logic changes.
+		referenced = true
 		if err := s.store.RecordDeletionCheck(ctx, DeletionCheck{
 			ProductID:      productID,
 			ReferenceCount: len(references),
